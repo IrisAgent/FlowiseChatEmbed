@@ -1,5 +1,6 @@
 import { FileUpload, IAction } from '@/components/Bot';
 export type IncomingInput = {
+    query?: string;
     question?: string;
     form?: Record<string, unknown>;
     uploads?: FileUpload[];

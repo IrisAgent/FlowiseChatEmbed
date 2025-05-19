@@ -2,6 +2,7 @@ import { FileUpload, IAction } from '@/components/Bot';
 import { sendRequest } from '@/utils/index';
 
 export type IncomingInput = {
+  query?: string;
   question?: string;
   form?: Record<string, unknown>;
   uploads?: FileUpload[];
@@ -80,7 +81,7 @@ export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:3000', bod
 export const sendMessageQuery = ({ chatflowid, apiHost = 'http://localhost:3000', body, onRequest }: MessageRequest) =>
   sendRequest<any>({
     method: 'POST',
-    url: `${apiHost}/api/v1/prediction/${chatflowid}`,
+    url: `${apiHost}`,
     body,
     onRequest: onRequest,
   });
