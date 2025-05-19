@@ -124,7 +124,7 @@ export type MessageType = {
   id?: string;
   followUpPrompts?: string;
   dateTime?: string;
-  buttons?: { payload: string; title: string; }[]
+  buttons?: { payload: string; title: string }[];
 };
 
 type IUploads = {
