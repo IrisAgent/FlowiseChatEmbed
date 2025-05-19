@@ -111,6 +111,20 @@ export const BotBubble = (props: Props) => {
           el.appendChild(button);
         }
       }
+
+      if (props.message.buttons?.length) {
+        for (const button of props.message.buttons) {
+          const element = document.createElement('button');
+          element.textContent = button.title;
+          element.className =
+            'py-1 px-4 my-2 justify-center text-center w-full font-medium text-white focus:outline-none flex items-center disabled:opacity-50 disabled:cursor-not-allowed disabled:brightness-100 transition-all filter active:brightness-75 in-chat-button';
+          element.addEventListener('click', function () {
+            props.handleActionClick({ label: button.title, type: button.payload }, null)
+          });
+
+          el.appendChild(element);
+        }
+      }
     }
   };
 

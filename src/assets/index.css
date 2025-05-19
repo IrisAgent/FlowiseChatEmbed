@@ -23,7 +23,7 @@
   --chatbot-header-bg-color: #ffffff;
   --chatbot-header-color: #303235;
 
-  --chatbot-border-radius: 6px;
+  --chatbot-border-radius: 30px;
 
   /* Phone input */
   --PhoneInputCountryFlag-borderColor: transparent;
@@ -182,6 +182,16 @@ textarea {
   background-color: #02a0a0c2;
   border: 1px solid #02a0a0c2;
   border-radius: var(--chatbot-border-radius);
+}
+
+.in-chat-button {
+  color: #303235;
+  background-color: #F5F5F5;
+  border-radius: var(--chatbot-border-radius);
+}
+
+.in-chat-button:hover {
+    background-color: #E0E0E0;
 }
 
 .chatbot-button {
@@ -457,7 +467,7 @@ textarea {
     max-width: unset !important;
     max-height: unset !important;
     height: 100% !important;
-    overflow: auto; 
+    overflow: auto;
     overflow-x: hidden; /* Prevent horizontal scrolling */
   }
 

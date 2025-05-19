@@ -77,6 +77,10 @@ export type MessageType = {
     id?: string;
     followUpPrompts?: string;
     dateTime?: string;
+    buttons?: {
+        payload: string;
+        title: string;
+    }[];
 };
 type observerConfigType = (accessor: string | boolean | object | MessageType[]) => void;
 export type observersConfigType = Record<'observeUserInput' | 'observeLoading' | 'observeMessages', observerConfigType>;

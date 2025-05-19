@@ -124,6 +124,7 @@ export type MessageType = {
   id?: string;
   followUpPrompts?: string;
   dateTime?: string;
+  buttons?: { payload: string; title: string; }[]
 };
 
 type IUploads = {
@@ -1019,7 +1020,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     });
 
     const body: IncomingInput = {
-      question: value,
+      query: value,
       chatId: chatId(),
     };
 
@@ -1049,10 +1050,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       });
 
       if (result.data) {
-        const data = result.data;
+        const data = result.data[0];
 
         let text = '';
-        if (data.text) text = data.text;
+        if (data.plaintext) text = data.plaintext;
         else if (data.json) text = JSON.stringify(data.json, null, 2);
         else text = JSON.stringify(data, null, 2);
 
@@ -1075,6 +1076,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             type: 'apiMessage' as messageType,
             feedback: null,
             dateTime: new Date().toISOString(),
+            buttons: data?.data[0]?.buttons,
           };
           allMessages.push(newMessage);
           addChatMessage(allMessages);
