@@ -1,5 +1,6 @@
 import { Setter } from 'solid-js';
 import { FileEvent, UploadsConfig } from '@/components/Bot';
+import 'emoji-picker-element';
 type TextInputProps = {
     placeholder?: string;
     backgroundColor?: string;

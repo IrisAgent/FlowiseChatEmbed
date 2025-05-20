@@ -7,6 +7,8 @@ import { ImageUploadButton } from '@/components/buttons/ImageUploadButton';
 import { RecordAudioButton } from '@/components/buttons/RecordAudioButton';
 import { AttachmentUploadButton } from '@/components/buttons/AttachmentUploadButton';
 import { ChatInputHistory } from '@/utils/chatInputHistory';
+import { EmojiPickerButton } from '@/components/buttons/EmojiPickerButton';
+import 'emoji-picker-element';
 
 type TextInputProps = {
   placeholder?: string;
@@ -40,12 +42,38 @@ const defaultSendSound = 'https://cdn.jsdelivr.net/gh/FlowiseAI/FlowiseChatEmbed
 
 export const TextInput = (props: TextInputProps) => {
   const [isSendButtonDisabled, setIsSendButtonDisabled] = createSignal(false);
+  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = createSignal(false);
+  let emojiPickerContainer: HTMLDivElement | undefined;
   const [warningMessage, setWarningMessage] = createSignal('');
   const [inputHistory] = createSignal(new ChatInputHistory(() => props.maxHistorySize || 10));
   let inputRef: HTMLInputElement | HTMLTextAreaElement | undefined;
   let fileUploadRef: HTMLInputElement | HTMLTextAreaElement | undefined;
   let imgUploadRef: HTMLInputElement | HTMLTextAreaElement | undefined;
   let audioRef: HTMLAudioElement | undefined;
+
+  const toggleEmojiPicker = () => {
+    if (isEmojiPickerVisible()) {
+      if (emojiPickerContainer) {
+        emojiPickerContainer.innerHTML = '';
+      }
+      setIsEmojiPickerVisible(false);
+      return
+    }
+    if (emojiPickerContainer) {
+      emojiPickerContainer.innerHTML = '';
+      const emojiPicker = document.createElement('emoji-picker');
+      emojiPicker.setAttribute('class', 'light')
+      emojiPicker.addEventListener('emoji-click', (event: any) => {
+        const currentValue = props.inputValue || '';
+        const newValue = currentValue + event.detail.unicode;
+        handleInput(newValue);
+        if (emojiPickerContainer) emojiPickerContainer.innerHTML = '';
+        setIsEmojiPickerVisible(false);
+      });
+      emojiPickerContainer.appendChild(emojiPicker);
+    }
+    setIsEmojiPickerVisible(true);
+  };
 
   const handleInput = (inputValue: string) => {
     const wordCount = inputValue.length;
@@ -154,7 +182,7 @@ export const TextInput = (props: TextInputProps) => {
           {warningMessage()}
         </div>
       </Show>
-      <div class="w-full flex items-end justify-between">
+      <div class="w-full flex items-end justify-between relative">
         {props.uploadsConfig?.isImageUploadAllowed ? (
           <>
             <ImageUploadButton
@@ -220,6 +248,14 @@ export const TextInput = (props: TextInputProps) => {
             <span style={{ 'font-family': 'Poppins, sans-serif' }}>Record Audio</span>
           </RecordAudioButton>
         ) : null}
+        <div ref={emojiPickerContainer} class="absolute right-0 bottom-16"></div>
+        <EmojiPickerButton
+          buttonColor={props.sendButtonColor}
+          type="button"
+          class="m-0 h-14 flex items-center justify-center"
+          isDisabled={props.disabled || isSendButtonDisabled()}
+          on:click={toggleEmojiPicker}
+        />
         <SendButton
           sendButtonColor={props.sendButtonColor}
           type="button"
