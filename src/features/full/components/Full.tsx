@@ -85,6 +85,7 @@ export const Full = (props: FullProps, { element }: { element: HTMLElement }) =>
             chatflowid={props.chatflowid}
             chatflowConfig={props.chatflowConfig}
             apiHost={props.apiHost}
+            customHeaders={props.customHeaders}
             onRequest={props.onRequest}
             isFullPage={true}
             observersConfig={props.observersConfig}
@@ -93,6 +94,7 @@ export const Full = (props: FullProps, { element }: { element: HTMLElement }) =>
             disclaimer={props.theme?.disclaimer}
             dateTimeToggle={props.theme?.chatWindow?.dateTimeToggle}
             renderHTML={props.theme?.chatWindow?.renderHTML}
+            uploadsConfig={props.uploadsConfig}
           />
         </div>
       </Show>

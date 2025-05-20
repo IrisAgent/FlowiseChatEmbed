@@ -140,6 +140,7 @@ export type observersConfigType = Record<'observeUserInput' | 'observeLoading' |
 export type BotProps = {
   chatflowid: string;
   apiHost?: string;
+  customHeaders?: object;
   onRequest?: (request: RequestInit) => Promise<void>;
   chatflowConfig?: Record<string, unknown>;
   backgroundColor?: string;
@@ -173,6 +174,7 @@ export type BotProps = {
   dateTimeToggle?: DateTimeToggleTheme;
   renderHTML?: boolean;
   closeBot?: () => void;
+  uploadsConfig?: UploadsConfig;
 };
 
 export type LeadsConfig = {
@@ -1045,6 +1047,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const result = await sendMessageQuery({
         chatflowid: props.chatflowid,
         apiHost: props.apiHost,
+        headers: props.customHeaders,
         body,
         onRequest: props.onRequest,
       });
@@ -1312,6 +1315,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       onRequest: props.onRequest,
     });
 
+    if (props.uploadsConfig) {
+      setUploadsConfig(props.uploadsConfig);
+    }
+
     if (result.data) {
       const chatbotConfig = result.data;
 
@@ -1385,7 +1392,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         const chatFeedbackStatus = chatbotConfig.chatFeedback.status;
         setChatFeedbackStatus(chatFeedbackStatus);
       }
-      if (chatbotConfig.uploads) {
+      if (chatbotConfig.uploads && !props.uploadsConfig) {
         setUploadsConfig(chatbotConfig.uploads);
       }
       if (chatbotConfig.leads) {
