@@ -57,12 +57,12 @@ export const TextInput = (props: TextInputProps) => {
         emojiPickerContainer.innerHTML = '';
       }
       setIsEmojiPickerVisible(false);
-      return
+      return;
     }
     if (emojiPickerContainer) {
       emojiPickerContainer.innerHTML = '';
       const emojiPicker = document.createElement('emoji-picker');
-      emojiPicker.setAttribute('class', 'light')
+      emojiPicker.setAttribute('class', 'light');
       emojiPicker.addEventListener('emoji-click', (event: any) => {
         const currentValue = props.inputValue || '';
         const newValue = currentValue + event.detail.unicode;
@@ -248,7 +248,7 @@ export const TextInput = (props: TextInputProps) => {
             <span style={{ 'font-family': 'Poppins, sans-serif' }}>Record Audio</span>
           </RecordAudioButton>
         ) : null}
-        <div ref={emojiPickerContainer} class="absolute right-0 bottom-16"></div>
+        <div ref={emojiPickerContainer} class="absolute right-0 bottom-16" />
         <EmojiPickerButton
           buttonColor={props.sendButtonColor}
           type="button"
