@@ -2,6 +2,7 @@ import { FileUpload, IAction } from '@/components/Bot';
 import { sendRequest } from '@/utils/index';
 
 export type IncomingInput = {
+  query?: string;
   question?: string;
   form?: Record<string, unknown>;
   uploads?: FileUpload[];
@@ -16,6 +17,7 @@ export type IncomingInput = {
 
 type BaseRequest = {
   apiHost?: string;
+  headers?: object;
   onRequest?: (request: RequestInit) => Promise<void>;
 };
 
@@ -46,6 +48,7 @@ export type UpdateFeedbackRequest = BaseRequest & {
 export type UpsertRequest = BaseRequest & {
   chatflowid: string;
   apiHost?: string;
+  customHeaders?: object;
   formData: FormData;
 };
 
@@ -77,10 +80,11 @@ export const updateFeedbackQuery = ({ id, apiHost = 'http://localhost:3000', bod
     onRequest: onRequest,
   });
 
-export const sendMessageQuery = ({ chatflowid, apiHost = 'http://localhost:3000', body, onRequest }: MessageRequest) =>
+export const sendMessageQuery = ({ chatflowid, apiHost = 'http://localhost:3000', body, onRequest, headers = {} }: MessageRequest) =>
   sendRequest<any>({
     method: 'POST',
-    url: `${apiHost}/api/v1/prediction/${chatflowid}`,
+    headers,
+    url: `${apiHost}`,
     body,
     onRequest: onRequest,
   });

@@ -124,6 +124,7 @@ export type MessageType = {
   id?: string;
   followUpPrompts?: string;
   dateTime?: string;
+  buttons?: { payload: string; title: string }[];
 };
 
 type IUploads = {
@@ -139,6 +140,7 @@ export type observersConfigType = Record<'observeUserInput' | 'observeLoading' |
 export type BotProps = {
   chatflowid: string;
   apiHost?: string;
+  customHeaders?: object;
   onRequest?: (request: RequestInit) => Promise<void>;
   chatflowConfig?: Record<string, unknown>;
   backgroundColor?: string;
@@ -172,6 +174,7 @@ export type BotProps = {
   dateTimeToggle?: DateTimeToggleTheme;
   renderHTML?: boolean;
   closeBot?: () => void;
+  uploadsConfig?: UploadsConfig;
 };
 
 export type LeadsConfig = {
@@ -1019,7 +1022,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
     });
 
     const body: IncomingInput = {
-      question: value,
+      query: value,
       chatId: chatId(),
     };
 
@@ -1044,15 +1047,16 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       const result = await sendMessageQuery({
         chatflowid: props.chatflowid,
         apiHost: props.apiHost,
+        headers: props.customHeaders,
         body,
         onRequest: props.onRequest,
       });
 
       if (result.data) {
-        const data = result.data;
+        const data = result.data[0];
 
         let text = '';
-        if (data.text) text = data.text;
+        if (data.plaintext) text = data.plaintext;
         else if (data.json) text = JSON.stringify(data.json, null, 2);
         else text = JSON.stringify(data, null, 2);
 
@@ -1075,6 +1079,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
             type: 'apiMessage' as messageType,
             feedback: null,
             dateTime: new Date().toISOString(),
+            buttons: data?.data[0]?.buttons,
           };
           allMessages.push(newMessage);
           addChatMessage(allMessages);
@@ -1310,6 +1315,10 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       onRequest: props.onRequest,
     });
 
+    if (props.uploadsConfig) {
+      setUploadsConfig(props.uploadsConfig);
+    }
+
     if (result.data) {
       const chatbotConfig = result.data;
 
@@ -1383,7 +1392,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
         const chatFeedbackStatus = chatbotConfig.chatFeedback.status;
         setChatFeedbackStatus(chatFeedbackStatus);
       }
-      if (chatbotConfig.uploads) {
+      if (chatbotConfig.uploads && !props.uploadsConfig) {
         setUploadsConfig(chatbotConfig.uploads);
       }
       if (chatbotConfig.leads) {

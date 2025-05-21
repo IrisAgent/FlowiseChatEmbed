@@ -1,5 +1,6 @@
 import { FileUpload, IAction } from '@/components/Bot';
 export type IncomingInput = {
+    query?: string;
     question?: string;
     form?: Record<string, unknown>;
     uploads?: FileUpload[];
@@ -13,6 +14,7 @@ export type IncomingInput = {
 };
 type BaseRequest = {
     apiHost?: string;
+    headers?: object;
     onRequest?: (request: RequestInit) => Promise<void>;
 };
 export type MessageRequest = BaseRequest & {
@@ -37,6 +39,7 @@ export type UpdateFeedbackRequest = BaseRequest & {
 export type UpsertRequest = BaseRequest & {
     chatflowid: string;
     apiHost?: string;
+    customHeaders?: object;
     formData: FormData;
 };
 export type LeadCaptureInput = {
@@ -57,7 +60,7 @@ export declare const updateFeedbackQuery: ({ id, apiHost, body, onRequest }: Upd
     data?: unknown;
     error?: Error | undefined;
 }>;
-export declare const sendMessageQuery: ({ chatflowid, apiHost, body, onRequest }: MessageRequest) => Promise<{
+export declare const sendMessageQuery: ({ chatflowid, apiHost, body, onRequest, headers }: MessageRequest) => Promise<{
     data?: any;
     error?: Error | undefined;
 }>;

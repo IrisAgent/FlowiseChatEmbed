@@ -1,14 +1,16 @@
-import { observersConfigType } from './components/Bot';
+import { observersConfigType, UploadsConfig } from './components/Bot';
 import { BubbleTheme } from './features/bubble/types';
 
 /* eslint-disable solid/reactivity */
 type BotProps = {
   chatflowid: string;
   apiHost?: string;
+  customHeaders?: object;
   onRequest?: (request: RequestInit) => Promise<void>;
   chatflowConfig?: Record<string, unknown>;
   observersConfig?: observersConfigType;
   theme?: BubbleTheme;
+  uploadsConfig?: UploadsConfig;
 };
 
 let elementUsed: Element | undefined;

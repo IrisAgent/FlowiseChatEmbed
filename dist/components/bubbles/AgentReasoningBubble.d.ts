@@ -1,6 +1,7 @@
 import { FileUpload } from '../Bot';
 type Props = {
     apiHost?: string;
+    customHeaders?: object;
     chatflowid: string;
     chatId: string;
     agentName: string;
